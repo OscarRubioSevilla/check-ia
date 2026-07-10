@@ -13,8 +13,7 @@ export function TerminalPanel({
   return (
     <div
       className={cn(
-        "w-full rounded-sm border border-matrix-primary/70 bg-matrix-panel p-4",
-        "shadow-[0_0_12px_rgba(0,255,65,0.2),inset_0_0_24px_rgba(0,255,65,0.04)]",
+        "w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm",
         className,
       )}
       {...props}

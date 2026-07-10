@@ -11,16 +11,16 @@ export function ProgressHeader() {
   return (
     <>
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-base font-bold text-matrix-primary">
+        <h1 className="text-base font-semibold text-gray-900">
           Evaluación Workshop
         </h1>
-        <p className="shrink-0 font-mono text-sm text-matrix-muted">
+        <p className="shrink-0 text-sm text-gray-500">
           {checkedCount}/{TOTAL_CRITERIA_COUNT} criterios
         </p>
       </div>
 
       <div
-        className="mt-3 h-2 w-full overflow-hidden rounded-full bg-matrix-panel"
+        className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-gray-200"
         role="progressbar"
         aria-valuenow={percent}
         aria-valuemin={0}
@@ -28,12 +28,12 @@ export function ProgressHeader() {
         aria-label="Progreso global del checklist"
       >
         <div
-          className="h-full rounded-full bg-matrix-primary transition-[width] duration-300 ease-out"
+          className="h-full rounded-full bg-blue-500 transition-[width] duration-300 ease-out"
           style={{ width: `${percent}%` }}
         />
       </div>
 
-      <p className="mt-2 text-right font-mono text-xs text-matrix-dim">
+      <p className="mt-2 text-right text-xs text-gray-400">
         {percent}% completado
       </p>
     </>

@@ -13,8 +13,8 @@ export default defineConfig({
       manifest: {
         name: 'Workshop Matrix Evaluator',
         short_name: 'MatrixCheck',
-        theme_color: '#00FF41',
-        background_color: '#050505',
+        theme_color: '#f9fafb',
+        background_color: '#f9fafb',
         display: 'standalone',
         orientation: 'portrait',
         icons: [

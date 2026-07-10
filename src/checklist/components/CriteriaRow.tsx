@@ -4,9 +4,9 @@ import { cn } from '../../shared/lib/cn'
 import { useChecklistStore } from '../hooks/useChecklistStore'
 
 const RATING_DOT_CLASS: Record<Rating, string> = {
-  green: 'bg-matrix-primary shadow-[0_0_6px_rgba(0,255,65,0.8)]',
-  yellow: 'bg-yellow-400 shadow-[0_0_6px_rgba(250,204,21,0.7)]',
-  red: 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.7)]',
+  green: 'bg-green-500',
+  yellow: 'bg-yellow-500',
+  red: 'bg-red-500',
 }
 
 export interface CriteriaRowProps {
@@ -39,21 +39,21 @@ export function CriteriaRow({
   const hasNote = note.trim().length > 0
 
   return (
-    <div className="border-b border-matrix-dim/30 py-3 last:border-b-0">
+    <div className="border-b border-gray-200 py-3 last:border-b-0">
       <div className="flex min-h-12 items-start gap-3">
         <span
           aria-hidden="true"
           className={cn(
-            'mt-1.5 size-3 shrink-0 rounded-full',
+            'mt-1.5 size-2 shrink-0 rounded-full',
             RATING_DOT_CLASS[baselineRating],
           )}
           title={`Evaluación base: ${baselineRating}`}
         />
 
         <div className="min-w-0 flex-1">
-          <p className="text-sm leading-snug text-matrix-primary">{label}</p>
+          <p className="text-sm leading-snug text-gray-900">{label}</p>
           {hint ? (
-            <p className="mt-1 line-clamp-2 text-xs text-matrix-dim">{hint}</p>
+            <p className="mt-1 line-clamp-2 text-xs text-gray-500">{hint}</p>
           ) : null}
         </div>
 
@@ -62,17 +62,17 @@ export function CriteriaRow({
           checked={isChecked}
           onChange={() => toggleCriterion(projectId, criterionId)}
           aria-label={`Marcar criterio: ${label}`}
-          className="mt-1 size-6 shrink-0 touch-manipulation accent-matrix-primary"
+          className="mt-1 size-5 shrink-0 touch-manipulation accent-blue-500"
         />
       </div>
 
-      <div className="mt-2 pl-6">
+      <div className="mt-2 pl-5">
         <button
           type="button"
           onClick={() => setNoteExpanded((expanded) => !expanded)}
           aria-expanded={noteExpanded}
           aria-controls={noteFieldId}
-          className="min-h-10 touch-manipulation text-xs text-matrix-muted underline-offset-2 hover:text-matrix-primary hover:underline"
+          className="min-h-10 touch-manipulation text-xs text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
         >
           {noteExpanded
             ? 'Ocultar nota'
@@ -90,7 +90,7 @@ export function CriteriaRow({
             }
             rows={3}
             placeholder="Notas de evaluación…"
-            className="mt-2 w-full resize-y rounded-sm border border-matrix-dim/60 bg-matrix-bg/80 px-3 py-2 text-sm text-matrix-primary placeholder:text-matrix-dim focus:border-matrix-primary focus:outline-none focus:ring-1 focus:ring-matrix-primary"
+            className="mt-2 w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         ) : null}
       </div>

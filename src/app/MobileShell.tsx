@@ -10,7 +10,7 @@ export function ProgressHeader({ children, className }: ProgressHeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 border-b border-matrix-primary/30 bg-matrix-bg/95 backdrop-blur-sm',
+        'sticky top-0 z-20 border-b border-gray-200 bg-white',
         className,
       )}
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
@@ -43,7 +43,7 @@ export function MobileShell({
   return (
     <div
       className={cn(
-        'flex min-h-svh flex-col bg-matrix-bg font-mono text-matrix-muted',
+        'flex min-h-svh flex-col bg-gray-50 text-gray-700',
         className,
       )}
     >
@@ -62,7 +62,7 @@ export function MobileShell({
 
       {bottomPanel ? (
         <div
-          className="fixed inset-x-0 bottom-0 z-30 border-t border-matrix-primary/30 bg-matrix-bg/95 backdrop-blur-sm"
+          className="fixed inset-x-0 bottom-0 z-30 border-t border-gray-200 bg-white"
           style={{
             paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             paddingLeft: 'env(safe-area-inset-left, 0px)',

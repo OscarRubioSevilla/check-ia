@@ -17,13 +17,22 @@ const RATING_LABELS: Record<Rating, string> = {
   red: 'Rojo',
 }
 
-function ratingClassName(rating: Rating): string {
+function badgeClassName(rating: Rating): string {
   const map: Record<Rating, string> = {
     green: styles.badgeGreen,
     yellow: styles.badgeYellow,
     red: styles.badgeRed,
   }
   return `${styles.badge} ${map[rating]}`
+}
+
+function dotClassName(rating: Rating): string {
+  const map: Record<Rating, string> = {
+    green: styles.dotGreen,
+    yellow: styles.dotYellow,
+    red: styles.dotRed,
+  }
+  return `${styles.ratingDot} ${map[rating]}`
 }
 
 function countRatings(project: WorkshopProject): Record<Rating, number> {
@@ -68,11 +77,18 @@ export function ProjectCard({
           ) : null}
         </span>
         <span className={styles.badges} aria-label="Semáforo de criterios">
-          <span className={ratingClassName('green')}>{ratingCounts.green}</span>
-          <span className={ratingClassName('yellow')}>
+          <span className={badgeClassName('green')}>
+            <span className={styles.badgeDot} aria-hidden="true" />
+            {ratingCounts.green}
+          </span>
+          <span className={badgeClassName('yellow')}>
+            <span className={styles.badgeDot} aria-hidden="true" />
             {ratingCounts.yellow}
           </span>
-          <span className={ratingClassName('red')}>{ratingCounts.red}</span>
+          <span className={badgeClassName('red')}>
+            <span className={styles.badgeDot} aria-hidden="true" />
+            {ratingCounts.red}
+          </span>
         </span>
         <span
           className={`${styles.chevron} ${expanded ? styles.chevronExpanded : ''}`}
@@ -124,11 +140,10 @@ export function ProjectCard({
                   <span className={styles.criterionName}>
                     <span>{criterion.label}</span>
                     <span
-                      className={ratingClassName(criterion.baselineRating)}
+                      className={dotClassName(criterion.baselineRating)}
                       aria-label={`Semáforo ${RATING_LABELS[criterion.baselineRating]}`}
-                    >
-                      {RATING_LABELS[criterion.baselineRating]}
-                    </span>
+                      title={RATING_LABELS[criterion.baselineRating]}
+                    />
                   </span>
                   <p className={styles.hint}>{criterion.hint}</p>
                 </label>

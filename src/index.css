@@ -2,12 +2,12 @@
 @import "./matrix-theme/tokens/matrix.css";
 
 @theme inline {
-  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", "Source Code Pro",
-    Menlo, Consolas, monospace;
+  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @layer base {
   body {
-    @apply bg-matrix-bg text-matrix-muted font-mono antialiased;
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
   }
 }
