@@ -1,8 +1,14 @@
 export type Rating = 'green' | 'yellow' | 'red'
 
+export type WorkshopCriterionSection =
+  | 'entregables-mvp'
+  | 'requisitos-tecnicos-ia'
+  | 'criterios-evaluacion'
+
 export interface WorkshopCriterionDefinition {
   id: string
   label: string
+  section: WorkshopCriterionSection
 }
 
 export interface WorkshopCriterion extends WorkshopCriterionDefinition {

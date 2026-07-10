@@ -67,23 +67,23 @@ describe('checklistStorage', () => {
     localStorage.setItem(
       CHECKLIST_STORAGE_KEY,
       JSON.stringify({
-        checked: { 'calorias:crud': true, 'bad:key': 'yes' },
-        notes: { 'calorias:crud': 'ok', 'bad:key': 1 },
+        checked: { 'calorias:crud-entidad': true, 'bad:key': 'yes' },
+        notes: { 'calorias:crud-entidad': 'ok', 'bad:key': 1 },
         lastUpdated: '2026-07-10T10:00:00.000Z',
       }),
     )
 
     expect(loadChecklistState()).toEqual({
-      checked: { 'calorias:crud': true },
-      notes: { 'calorias:crud': 'ok' },
+      checked: { 'calorias:crud-entidad': true },
+      notes: { 'calorias:crud-entidad': 'ok' },
       lastUpdated: '2026-07-10T10:00:00.000Z',
     })
   })
 
   it('guarda y recarga el estado completo', () => {
     const state = {
-      checked: { [makeCheckKey('cuentas', 'llm-central')]: true },
-      notes: { [makeCheckKey('cuentas', 'llm-central')]: 'Muy fuerte' },
+      checked: { [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: true },
+      notes: { [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: 'Muy fuerte' },
       lastUpdated: '2026-07-10T11:00:00.000Z',
     }
 
@@ -97,12 +97,12 @@ describe('checklistStorage', () => {
 
   it('toggleChecked alterna el valor del criterio', () => {
     const base = createDefaultChecklistState()
-    const key = makeCheckKey('estudio', 'responsive')
+    const key = makeCheckKey('app-estudio', 'responsive')
 
-    const first = toggleChecked(base, 'estudio', 'responsive')
+    const first = toggleChecked(base, 'app-estudio', 'responsive')
     expect(first.checked[key]).toBe(true)
 
-    const second = toggleChecked(first, 'estudio', 'responsive')
+    const second = toggleChecked(first, 'app-estudio', 'responsive')
     expect(second.checked[key]).toBe(false)
   })
 

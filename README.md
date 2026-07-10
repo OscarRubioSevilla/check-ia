@@ -10,10 +10,22 @@ Un evaluador interactivo que no sustituye el juicio del equipo, sino que **estru
 
 En un taller con **siete ideas de producto** (inventario QR, cuentas compartidas, juego, plan de estudio, calorías, viajes, meta concreta) es fácil perder el hilo: criterios distintos por conversación, comparaciones informales y olvido de qué ya se revisó. Esta app:
 
-- Aplica la **misma rúbrica global** (problema público, alcance MVP, arquitectura, full-stack, CRUD, API externa, LLM central, seguridad, responsive, IA en el proceso, documentación Forge) a todos los proyectos.
+- Aplica la **misma rúbrica oficial de 27 criterios** (189 checkboxes: 7 proyectos × 27) organizada en tres secciones: **Entregables MVP** (14), **Requisitos técnicos IA** (3) y **Criterios de evaluación** (10).
 - Muestra el **veredicto y la etiqueta “Recomendado”** de la matriz workshop.
 - Permite **marcar criterios revisados** y recuperar el estado al volver a abrir la PWA.
 - Destaca un **ranking de hasta tres proyectos recomendados** ordenados por criterios en verde.
+
+## Rúbrica oficial (27 criterios)
+
+Cada uno de los siete proyectos se evalúa con los mismos criterios:
+
+| Sección | Criterios |
+|---------|-----------|
+| **Entregables MVP** | Documentación Forge, problema/objetivo, alcance MVP, arquitectura, modelo de datos, frontend funcional, backend API, persistencia, CRUD entidad principal, validaciones, manejo de errores, seguridad, responsive, control de versiones |
+| **Requisitos técnicos IA** | API externa con valor real, LLM funcional, IA en el proceso |
+| **Criterios de evaluación** | Capacidad de análisis, calidad documentación, diseño solución, calidad código, uso IA/herramientas, integración APIs, integración LLM, seguridad y buenas prácticas, creatividad/innovación, presentación final |
+
+Los semáforos base (verde / amarillo / rojo) y las pistas por proyecto provienen del análisis previo en `workshopProjects.seed.ts`.
 
 ## Stack
 

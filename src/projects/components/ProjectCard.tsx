@@ -1,4 +1,8 @@
 import type { Rating, WorkshopProject } from '../types/project.types'
+import {
+  WORKSHOP_CRITERION_SECTION_LABELS,
+  WORKSHOP_CRITERION_SECTION_ORDER,
+} from '../data/workshopCriteria.global'
 import styles from './ProjectCard.module.css'
 
 interface ProjectCardProps {
@@ -122,31 +126,48 @@ export function ProjectCard({
 
       {expanded ? (
         <div className={styles.body}>
-          {project.criteria.map((criterion) => {
-            const checkboxId = `${project.id}-${criterion.id}`
+          {WORKSHOP_CRITERION_SECTION_ORDER.map((section) => {
+            const sectionCriteria = project.criteria.filter(
+              (criterion) => criterion.section === section,
+            )
+
+            if (sectionCriteria.length === 0) {
+              return null
+            }
 
             return (
-              <div key={criterion.id} className={styles.criterion}>
-                <input
-                  id={checkboxId}
-                  type="checkbox"
-                  className={styles.checkbox}
-                  checked={checkedByCriterion[criterion.id] === true}
-                  onChange={(event) =>
-                    onCriterionChange(criterion.id, event.target.checked)
-                  }
-                />
-                <label htmlFor={checkboxId} className={styles.criterionLabel}>
-                  <span className={styles.criterionName}>
-                    <span>{criterion.label}</span>
-                    <span
-                      className={dotClassName(criterion.baselineRating)}
-                      aria-label={`Semáforo ${RATING_LABELS[criterion.baselineRating]}`}
-                      title={RATING_LABELS[criterion.baselineRating]}
-                    />
-                  </span>
-                  <p className={styles.hint}>{criterion.hint}</p>
-                </label>
+              <div key={section} className={styles.section}>
+                <h4 className={styles.sectionTitle}>
+                  {WORKSHOP_CRITERION_SECTION_LABELS[section]}
+                </h4>
+                {sectionCriteria.map((criterion) => {
+                  const checkboxId = `${project.id}-${criterion.id}`
+
+                  return (
+                    <div key={criterion.id} className={styles.criterion}>
+                      <input
+                        id={checkboxId}
+                        type="checkbox"
+                        className={styles.checkbox}
+                        checked={checkedByCriterion[criterion.id] === true}
+                        onChange={(event) =>
+                          onCriterionChange(criterion.id, event.target.checked)
+                        }
+                      />
+                      <label htmlFor={checkboxId} className={styles.criterionLabel}>
+                        <span className={styles.criterionName}>
+                          <span>{criterion.label}</span>
+                          <span
+                            className={dotClassName(criterion.baselineRating)}
+                            aria-label={`Semáforo ${RATING_LABELS[criterion.baselineRating]}`}
+                            title={RATING_LABELS[criterion.baselineRating]}
+                          />
+                        </span>
+                        <p className={styles.hint}>{criterion.hint}</p>
+                      </label>
+                    </div>
+                  )
+                })}
               </div>
             )
           })}

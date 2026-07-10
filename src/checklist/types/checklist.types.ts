@@ -6,8 +6,8 @@ export interface ChecklistState {
 
 export const CHECKLIST_STORAGE_KEY = 'workshop-matrix-checklist'
 
-/** 7 proyectos × 11 criterios */
-export const TOTAL_CRITERIA_COUNT = 77
+/** 7 proyectos × 27 criterios */
+export const TOTAL_CRITERIA_COUNT = 189
 
 export function makeCheckKey(projectId: string, criterionId: string): string {
   return `${projectId}:${criterionId}`
