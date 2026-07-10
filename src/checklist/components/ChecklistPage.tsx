@@ -4,6 +4,7 @@ import { WORKSHOP_PROJECTS } from '../../projects/data/workshopProjects.seed'
 import { ProjectList } from '../../projects/components/ProjectList'
 import { RecommendationPanel } from '../../projects/components/RecommendationPanel'
 import type { ChecklistState as ProjectChecklistState } from '../../projects/types/project.types'
+import type { EvaluationRating } from '../types/checklist.types'
 import { useChecklistStore } from '../hooks/useChecklistStore'
 import { ProgressHeader } from './ProgressHeader'
 
@@ -31,16 +32,47 @@ function toProjectChecklistState(
   return result
 }
 
+function toProjectRatingsState(
+  ratings: Record<string, EvaluationRating>,
+): Record<string, Record<string, EvaluationRating>> {
+  const result: Record<string, Record<string, EvaluationRating>> = {}
+
+  for (const [key, value] of Object.entries(ratings)) {
+    const separatorIndex = key.indexOf(':')
+    if (separatorIndex === -1) {
+      continue
+    }
+
+    const projectId = key.slice(0, separatorIndex)
+    const criterionId = key.slice(separatorIndex + 1)
+
+    if (!result[projectId]) {
+      result[projectId] = {}
+    }
+
+    result[projectId][criterionId] = value
+  }
+
+  return result
+}
+
 export function ChecklistPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [recommendationsExpanded, setRecommendationsExpanded] = useState(false)
 
   const checked = useChecklistStore((state) => state.checked)
+  const ratings = useChecklistStore((state) => state.ratings)
   const toggleCriterion = useChecklistStore((state) => state.toggleCriterion)
+  const setRating = useChecklistStore((state) => state.setRating)
 
   const projectChecklistState = useMemo(
     () => toProjectChecklistState(checked),
     [checked],
+  )
+
+  const projectRatingsState = useMemo(
+    () => toProjectRatingsState(ratings),
+    [ratings],
   )
 
   const handleProjectToggle = (projectId: string) => {
@@ -71,6 +103,14 @@ export function ChecklistPage() {
     }
   }
 
+  const handleRatingChange = (
+    projectId: string,
+    criterionId: string,
+    rating: EvaluationRating,
+  ) => {
+    setRating(projectId, criterionId, rating)
+  }
+
   return (
     <MobileShell
       header={<ProgressHeader />}
@@ -86,9 +126,11 @@ export function ChecklistPage() {
         <ProjectList
           projects={WORKSHOP_PROJECTS}
           checklistState={projectChecklistState}
+          ratingsState={projectRatingsState}
           expandedId={expandedId}
           onToggle={handleProjectToggle}
           onCriterionChange={handleCriterionChange}
+          onRatingChange={handleRatingChange}
         />
       </div>
     </MobileShell>

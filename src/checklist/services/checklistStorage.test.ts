@@ -8,6 +8,7 @@ import {
   loadChecklistState,
   saveChecklistState,
   setNote,
+  setRating,
   toggleChecked,
 } from './checklistStorage'
 
@@ -54,7 +55,12 @@ describe('checklistStorage', () => {
   })
 
   it('devuelve estado por defecto cuando localStorage está vacío', () => {
-    expect(loadChecklistState()).toEqual(createDefaultChecklistState())
+    const state = loadChecklistState()
+
+    expect(state.checked).toEqual({})
+    expect(state.ratings).toEqual({})
+    expect(state.notes).toEqual({})
+    expect(state.lastUpdated).toMatch(/^\d{4}-\d{2}-\d{2}T/)
   })
 
   it('devuelve estado por defecto cuando el JSON es inválido', () => {
@@ -68,6 +74,10 @@ describe('checklistStorage', () => {
       CHECKLIST_STORAGE_KEY,
       JSON.stringify({
         checked: { 'calorias:crud-entidad': true, 'bad:key': 'yes' },
+        ratings: {
+          'calorias:capacidad-analisis': 'strong',
+          'bad:key': 'invalid',
+        },
         notes: { 'calorias:crud-entidad': 'ok', 'bad:key': 1 },
         lastUpdated: '2026-07-10T10:00:00.000Z',
       }),
@@ -75,14 +85,36 @@ describe('checklistStorage', () => {
 
     expect(loadChecklistState()).toEqual({
       checked: { 'calorias:crud-entidad': true },
+      ratings: { 'calorias:capacidad-analisis': 'strong' },
       notes: { 'calorias:crud-entidad': 'ok' },
       lastUpdated: '2026-07-10T10:00:00.000Z',
+    })
+  })
+
+  it('migra estados antiguos sin ratings', () => {
+    localStorage.setItem(
+      CHECKLIST_STORAGE_KEY,
+      JSON.stringify({
+        checked: { 'viajes:responsive': true },
+        notes: {},
+        lastUpdated: '2026-07-10T09:00:00.000Z',
+      }),
+    )
+
+    expect(loadChecklistState()).toEqual({
+      checked: { 'viajes:responsive': true },
+      ratings: {},
+      notes: {},
+      lastUpdated: '2026-07-10T09:00:00.000Z',
     })
   })
 
   it('guarda y recarga el estado completo', () => {
     const state = {
       checked: { [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: true },
+      ratings: {
+        [makeCheckKey('cuentas-compartidas', 'capacidad-analisis')]: 'medium' as const,
+      },
       notes: { [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: 'Muy fuerte' },
       lastUpdated: '2026-07-10T11:00:00.000Z',
     }
@@ -106,6 +138,16 @@ describe('checklistStorage', () => {
     expect(second.checked[key]).toBe(false)
   })
 
+  it('setRating persiste evaluación externa por criterio', () => {
+    const base = createDefaultChecklistState()
+    const key = makeCheckKey('viajes', 'capacidad-analisis')
+
+    const next = setRating(base, 'viajes', 'capacidad-analisis', 'weak')
+
+    expect(next.ratings[key]).toBe('weak')
+    expect(next.checked).toEqual(base.checked)
+  })
+
   it('setNote persiste texto por criterio', () => {
     const base = createDefaultChecklistState()
     const key = makeCheckKey('viajes', 'api-externa')
@@ -114,5 +156,6 @@ describe('checklistStorage', () => {
 
     expect(next.notes[key]).toBe('Falta integración real')
     expect(next.checked).toEqual(base.checked)
+    expect(next.ratings).toEqual(base.ratings)
   })
 })

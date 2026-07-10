@@ -1,31 +1,36 @@
 # check-ia (Workshop Matrix Checklist)
 
-Aplicación web **PWA** con estética Matrix (terminal verde sobre fondo negro) para **evaluar y comparar los siete proyectos propuestos en el workshop** mediante un checklist de criterios compartidos. Diseñada **mobile-first**: cabecera fija con progreso global, lista de proyectos expandibles y panel inferior con el top de recomendados.
+Aplicación web **PWA** con estética Matrix (terminal verde sobre fondo negro) para **evaluar y comparar los siete proyectos propuestos en el workshop**. Diseñada **mobile-first**: cabecera fija con progreso global, lista de proyectos expandibles y panel inferior con el top de recomendados.
 
 ## Qué es
 
-Un evaluador interactivo que no sustituye el juicio del equipo, sino que **estructura la revisión**: cada proyecto muestra un semáforo por criterio (verde / amarillo / rojo según la matriz base), puedes marcar qué puntos ya validaste en vivo y ves el avance por proyecto y en conjunto. Los datos viven solo en el navegador; no hay cuentas ni servidor.
+Un evaluador interactivo que **estructura la revisión en dos bloques por proyecto**:
+
+1. **Entregables** — checklist de 17 puntos del taller (solo etiqueta + checkbox, sin pistas).
+2. **Evaluación externa** — 10 criterios cualitativos con selector **Fuerte / Medio / Débil**.
+
+Los datos viven solo en el navegador; no hay cuentas ni servidor.
 
 ## Problema que resuelve
 
 En un taller con **siete ideas de producto** (inventario QR, cuentas compartidas, juego, plan de estudio, calorías, viajes, meta concreta) es fácil perder el hilo: criterios distintos por conversación, comparaciones informales y olvido de qué ya se revisó. Esta app:
 
-- Aplica la **misma rúbrica oficial de 27 criterios** (189 checkboxes: 7 proyectos × 27) organizada en tres secciones: **Entregables MVP** (14), **Requisitos técnicos IA** (3) y **Criterios de evaluación** (10).
+- Aplica la **misma rúbrica oficial** en dos modalidades: **17 entregables** (checkbox) + **10 evaluaciones externas** (rating).
 - Muestra el **veredicto y la etiqueta “Recomendado”** de la matriz workshop.
-- Permite **marcar criterios revisados** y recuperar el estado al volver a abrir la PWA.
-- Destaca un **ranking de hasta tres proyectos recomendados** ordenados por criterios en verde.
+- Permite **marcar entregables** y **calificar evaluación externa** por proyecto, persistiendo en `localStorage`.
+- Destaca un **ranking de hasta tres proyectos recomendados** ordenados por criterios en verde (semáforo base del seed).
 
-## Rúbrica oficial (27 criterios)
+## Rúbrica oficial (27 ítems por proyecto, 189 total)
 
-Cada uno de los siete proyectos se evalúa con los mismos criterios:
+| Bloque | Modalidad | Criterios |
+|--------|-----------|-----------|
+| **Entregables MVP** (14) | Checkbox | Documentación Forge, problema/objetivo, alcance MVP, arquitectura, modelo de datos, frontend funcional, backend API, persistencia, CRUD entidad principal, validaciones, manejo de errores, seguridad, responsive, control de versiones |
+| **Requisitos técnicos IA** (3) | Checkbox | API externa con valor real, LLM funcional, IA en el proceso |
+| **Evaluación externa** (10) | Fuerte / Medio / Débil | Capacidad de análisis, calidad documentación, diseño solución, calidad código, uso IA/herramientas, integración APIs, integración LLM, seguridad y buenas prácticas, creatividad/innovación, presentación final |
 
-| Sección | Criterios |
-|---------|-----------|
-| **Entregables MVP** | Documentación Forge, problema/objetivo, alcance MVP, arquitectura, modelo de datos, frontend funcional, backend API, persistencia, CRUD entidad principal, validaciones, manejo de errores, seguridad, responsive, control de versiones |
-| **Requisitos técnicos IA** | API externa con valor real, LLM funcional, IA en el proceso |
-| **Criterios de evaluación** | Capacidad de análisis, calidad documentación, diseño solución, calidad código, uso IA/herramientas, integración APIs, integración LLM, seguridad y buenas prácticas, creatividad/innovación, presentación final |
+**Progreso global:** cada checkbox marcado o cada rating asignado cuenta como 1 de 189.
 
-Los semáforos base (verde / amarillo / rojo) y las pistas por proyecto provienen del análisis previo en `workshopProjects.seed.ts`.
+Los semáforos base (verde / amarillo / rojo) del seed siguen usándose en la cabecera de cada tarjeta y en el panel de recomendaciones; no aparecen en el checklist de entregables.
 
 ## Stack
 
@@ -34,14 +39,12 @@ Los semáforos base (verde / amarillo / rojo) y las pistas por proyecto proviene
 | UI | React 19 + TypeScript |
 | Build | Vite 8 |
 | Estilos | Tailwind CSS 4 + CSS Modules (tokens Matrix) |
-| Estado | Zustand (checklist + persistencia) |
+| Estado | Zustand (checklist + ratings + persistencia) |
 | PWA | `vite-plugin-pwa` (manifest, iconos, modo standalone) |
 | Tests | Vitest + happy-dom |
 | Lint | Oxlint |
 
 ## Arquitectura (screaming folders)
-
-La estructura del código agrupa por **capacidad de negocio**, no por tipo técnico genérico:
 
 ```
 check-ia/
@@ -49,7 +52,7 @@ check-ia/
 ├── src/
 │   ├── app/                # Composición raíz (App, MobileShell)
 │   ├── checklist/          # Página principal, store, persistencia local
-│   │   ├── components/     # ChecklistPage, ProgressHeader, CriteriaRow
+│   │   ├── components/     # ChecklistPage, ProgressHeader
 │   │   ├── hooks/          # useChecklistStore
 │   │   ├── services/       # checklistStorage (+ tests)
 │   │   └── types/
@@ -98,11 +101,25 @@ La PWA se abre en modo **standalone** (sin barra del navegador), con safe areas 
 
 ## Persistencia (`localStorage`)
 
-El progreso del checklist se guarda en el navegador bajo la clave:
+El progreso se guarda en el navegador bajo la clave:
 
 `workshop-matrix-checklist`
 
-Incluye qué criterios están marcados por proyecto, notas asociadas (si se usan) y `lastUpdated`. Borrar datos del sitio o usar otro dispositivo/navegador **no sincroniza** entre equipos.
+Estructura:
+
+```json
+{
+  "checked": { "proyecto-id:criterio-id": true },
+  "ratings": { "proyecto-id:criterio-id": "strong" },
+  "notes": {},
+  "lastUpdated": "2026-07-10T12:00:00.000Z"
+}
+```
+
+- `checked` — entregables MVP + requisitos técnicos (17 por proyecto).
+- `ratings` — evaluación externa: `strong` (Fuerte), `medium` (Medio), `weak` (Débil).
+
+Borrar datos del sitio o usar otro dispositivo/navegador **no sincroniza** entre equipos.
 
 ## Sin autenticación ni backend
 

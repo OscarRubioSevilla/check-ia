@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { TOTAL_CRITERIA_COUNT } from '../../checklist/types/checklist.types'
-import { WORKSHOP_CRITERIA_GLOBAL } from './workshopCriteria.global'
+import {
+  ITEMS_PER_PROJECT,
+  TOTAL_CRITERIA_COUNT,
+} from '../../checklist/types/checklist.types'
+import {
+  WORKSHOP_DELIVERABLE_CRITERION_IDS,
+  WORKSHOP_EVALUATION_CRITERION_IDS,
+  WORKSHOP_CRITERIA_GLOBAL,
+} from './workshopCriteria.global'
 import { WORKSHOP_PROJECTS } from './workshopProjects.seed'
 
 const EXPECTED_PROJECT_IDS = [
@@ -30,7 +37,7 @@ describe('workshopProjects.seed', () => {
     }
   })
 
-  it('define hint y semáforo para cada criterio de cada proyecto', () => {
+  it('define hint y semáforo base para cada criterio de cada proyecto', () => {
     for (const project of WORKSHOP_PROJECTS) {
       for (const criterion of project.criteria) {
         expect(criterion.hint.length).toBeGreaterThan(0)
@@ -39,7 +46,7 @@ describe('workshopProjects.seed', () => {
     }
   })
 
-  it('totaliza 189 checkboxes (7 × 27)', () => {
+  it('totaliza 189 ítems (7 × 17 entregables + 7 × 10 evaluaciones)', () => {
     const total = WORKSHOP_PROJECTS.reduce(
       (sum, project) => sum + project.criteria.length,
       0,
@@ -47,5 +54,8 @@ describe('workshopProjects.seed', () => {
 
     expect(total).toBe(189)
     expect(TOTAL_CRITERIA_COUNT).toBe(189)
+    expect(ITEMS_PER_PROJECT).toBe(27)
+    expect(WORKSHOP_DELIVERABLE_CRITERION_IDS).toHaveLength(17)
+    expect(WORKSHOP_EVALUATION_CRITERION_IDS).toHaveLength(10)
   })
 })

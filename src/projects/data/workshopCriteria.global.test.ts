@@ -3,6 +3,8 @@ import {
   WORKSHOP_CRITERIA_GLOBAL,
   WORKSHOP_CRITERION_IDS,
   WORKSHOP_CRITERION_SECTION_ORDER,
+  WORKSHOP_DELIVERABLE_CRITERION_IDS,
+  WORKSHOP_EVALUATION_CRITERION_IDS,
 } from './workshopCriteria.global'
 
 describe('workshopCriteria.global', () => {
@@ -20,6 +22,15 @@ describe('workshopCriteria.global', () => {
     )
 
     expect(sectionCounts).toEqual([14, 3, 10])
+  })
+
+  it('separa entregables (17) de evaluación externa (10)', () => {
+    expect(WORKSHOP_DELIVERABLE_CRITERION_IDS).toHaveLength(17)
+    expect(WORKSHOP_EVALUATION_CRITERION_IDS).toHaveLength(10)
+    expect([
+      ...WORKSHOP_DELIVERABLE_CRITERION_IDS,
+      ...WORKSHOP_EVALUATION_CRITERION_IDS,
+    ]).toEqual(WORKSHOP_CRITERION_IDS)
   })
 
   it('usa ids únicos para cada criterio', () => {

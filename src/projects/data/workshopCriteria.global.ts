@@ -9,13 +9,17 @@ export const WORKSHOP_CRITERION_SECTION_LABELS: Record<
 > = {
   'entregables-mvp': 'Entregables MVP',
   'requisitos-tecnicos-ia': 'Requisitos técnicos IA',
-  'criterios-evaluacion': 'Criterios de evaluación',
+  'evaluacion-externa': 'Evaluación externa',
 }
 
-export const WORKSHOP_CRITERION_SECTION_ORDER: WorkshopCriterionSection[] = [
+export const WORKSHOP_DELIVERABLE_SECTION_ORDER: WorkshopCriterionSection[] = [
   'entregables-mvp',
   'requisitos-tecnicos-ia',
-  'criterios-evaluacion',
+]
+
+export const WORKSHOP_CRITERION_SECTION_ORDER: WorkshopCriterionSection[] = [
+  ...WORKSHOP_DELIVERABLE_SECTION_ORDER,
+  'evaluacion-externa',
 ]
 
 export const WORKSHOP_CRITERIA_GLOBAL: WorkshopCriterionDefinition[] = [
@@ -107,55 +111,63 @@ export const WORKSHOP_CRITERIA_GLOBAL: WorkshopCriterionDefinition[] = [
   {
     id: 'capacidad-analisis',
     label: 'Capacidad de análisis',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'calidad-documentacion',
     label: 'Calidad de la documentación',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'diseno-solucion',
     label: 'Diseño de la solución',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'calidad-codigo',
     label: 'Calidad del código',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'uso-ia-herramientas',
     label: 'Uso adecuado de herramientas IA',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'integracion-api',
     label: 'Integración APIs externas',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'integracion-llm',
     label: 'Integración del LLM',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'seguridad-buenas-practicas',
     label: 'Seguridad y buenas prácticas',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'creatividad-innovacion',
     label: 'Creatividad e innovación',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
   {
     id: 'presentacion-final',
     label: 'Presentación final',
-    section: 'criterios-evaluacion',
+    section: 'evaluacion-externa',
   },
 ]
 
 export const WORKSHOP_CRITERION_IDS = WORKSHOP_CRITERIA_GLOBAL.map(
   (criterion) => criterion.id,
 )
+
+export const WORKSHOP_DELIVERABLE_CRITERION_IDS = WORKSHOP_CRITERIA_GLOBAL.filter(
+  (criterion) => criterion.section !== 'evaluacion-externa',
+).map((criterion) => criterion.id)
+
+export const WORKSHOP_EVALUATION_CRITERION_IDS = WORKSHOP_CRITERIA_GLOBAL.filter(
+  (criterion) => criterion.section === 'evaluacion-externa',
+).map((criterion) => criterion.id)

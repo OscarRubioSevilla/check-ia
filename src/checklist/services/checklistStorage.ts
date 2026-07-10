@@ -3,7 +3,10 @@ import {
   createDefaultChecklistState,
   makeCheckKey,
   type ChecklistState,
+  type EvaluationRating,
 } from '../types/checklist.types'
+
+const VALID_RATINGS = new Set<EvaluationRating>(['strong', 'medium', 'weak'])
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -17,7 +20,8 @@ function isChecklistState(value: unknown): value is ChecklistState {
   return (
     isRecord(value.checked) &&
     isRecord(value.notes) &&
-    typeof value.lastUpdated === 'string'
+    typeof value.lastUpdated === 'string' &&
+    (value.ratings === undefined || isRecord(value.ratings))
   )
 }
 
@@ -49,6 +53,27 @@ function sanitizeStringRecord(
   return result
 }
 
+function sanitizeRatingRecord(
+  value: Record<string, unknown> | undefined,
+): Record<string, EvaluationRating> {
+  const result: Record<string, EvaluationRating> = {}
+
+  if (!value) {
+    return result
+  }
+
+  for (const [key, entry] of Object.entries(value)) {
+    if (
+      typeof entry === 'string' &&
+      VALID_RATINGS.has(entry as EvaluationRating)
+    ) {
+      result[key] = entry as EvaluationRating
+    }
+  }
+
+  return result
+}
+
 function normalizeChecklistState(value: unknown): ChecklistState {
   if (!isChecklistState(value)) {
     return createDefaultChecklistState()
@@ -56,6 +81,7 @@ function normalizeChecklistState(value: unknown): ChecklistState {
 
   return {
     checked: sanitizeBooleanRecord(value.checked),
+    ratings: sanitizeRatingRecord(value.ratings),
     notes: sanitizeStringRecord(value.notes),
     lastUpdated: value.lastUpdated,
   }
@@ -92,6 +118,7 @@ export function saveChecklistState(state: ChecklistState): void {
   try {
     const payload: ChecklistState = {
       checked: state.checked,
+      ratings: state.ratings,
       notes: state.notes,
       lastUpdated: state.lastUpdated,
     }
@@ -114,6 +141,26 @@ export function toggleChecked(
       ...state.checked,
       [key]: !state.checked[key],
     },
+    ratings: { ...state.ratings },
+    notes: { ...state.notes },
+    lastUpdated: new Date().toISOString(),
+  }
+}
+
+export function setRating(
+  state: ChecklistState,
+  projectId: string,
+  criterionId: string,
+  rating: EvaluationRating,
+): ChecklistState {
+  const key = makeCheckKey(projectId, criterionId)
+
+  return {
+    checked: { ...state.checked },
+    ratings: {
+      ...state.ratings,
+      [key]: rating,
+    },
     notes: { ...state.notes },
     lastUpdated: new Date().toISOString(),
   }
@@ -129,6 +176,7 @@ export function setNote(
 
   return {
     checked: { ...state.checked },
+    ratings: { ...state.ratings },
     notes: {
       ...state.notes,
       [key]: note,

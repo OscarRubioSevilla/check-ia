@@ -2,10 +2,10 @@ import { TOTAL_CRITERIA_COUNT } from '../types/checklist.types'
 import { useChecklistStore } from '../hooks/useChecklistStore'
 
 export function ProgressHeader() {
-  const checked = useChecklistStore((state) => state.checked)
+  const getCompletedCount = useChecklistStore((state) => state.getCompletedCount)
   const getProgress = useChecklistStore((state) => state.getProgress)
 
-  const checkedCount = Object.values(checked).filter(Boolean).length
+  const completedCount = getCompletedCount()
   const percent = getProgress()
 
   return (
@@ -15,7 +15,7 @@ export function ProgressHeader() {
           Evaluación Workshop
         </h1>
         <p className="shrink-0 text-sm text-gray-500">
-          {checkedCount}/{TOTAL_CRITERIA_COUNT} criterios
+          {completedCount}/{TOTAL_CRITERIA_COUNT} criterios
         </p>
       </div>
 
