@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "./matrix-theme/tokens/matrix.css";
+
+@theme inline {
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", "Source Code Pro",
+    Menlo, Consolas, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-matrix-bg text-matrix-muted font-mono antialiased;
+  }
+}
