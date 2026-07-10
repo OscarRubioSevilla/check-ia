@@ -1,8 +1,15 @@
+.userMessage {
+  margin-left: auto;
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
 .userText {
   margin: 0;
   white-space: pre-wrap;
   line-height: 1.6;
   word-break: break-word;
+  color: inherit;
 }
 
 .assistantMessage {

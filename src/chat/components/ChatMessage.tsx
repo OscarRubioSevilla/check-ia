@@ -17,7 +17,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
       className={cn(
         'max-w-[90%] rounded-lg px-3 py-2 text-sm',
         isUser
-          ? 'ml-auto bg-accent-bg text-on-accent'
+          ? styles.userMessage
           : cn('mr-auto border border-border bg-surface text-primary', styles.assistantMessage),
       )}
     >
