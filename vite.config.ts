@@ -11,10 +11,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Workshop Matrix Evaluator',
-        short_name: 'MatrixCheck',
-        theme_color: '#f9fafb',
-        background_color: '#f9fafb',
+        name: 'Check IA — Evaluación Workshop',
+        short_name: 'Check IA',
+        theme_color: '#f1f1f1',
+        background_color: '#f1f1f1',
         display: 'standalone',
         orientation: 'portrait',
         icons: [

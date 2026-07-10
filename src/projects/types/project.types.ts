@@ -19,7 +19,6 @@ export interface WorkshopCriterion extends WorkshopCriterionDefinition {
 export interface WorkshopProject {
   id: string
   name: string
-  emoji: string
   verdict: string
   criteria: WorkshopCriterion[]
   recommended: boolean

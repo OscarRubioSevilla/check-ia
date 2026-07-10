@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
+import { ChevronUp } from 'lucide-react'
 import type { WorkshopProject } from '../types/project.types'
+import { ProjectIcon } from './ProjectIcon'
 import styles from './RecommendationPanel.module.css'
 
 interface RecommendationPanelProps {
@@ -45,27 +47,24 @@ export function RecommendationPanel({
               {topProjects.length === 1 ? '' : 's'}
             </p>
           </span>
-          <span
+          <ChevronUp
             className={`${styles.chevron} ${expanded ? styles.chevronExpanded : ''}`}
-            aria-hidden="true"
-          >
-            ▲
-          </span>
+            aria-hidden
+            strokeWidth={2}
+          />
         </button>
 
         {expanded ? (
           <div className={styles.content}>
             {topProjects.length === 0 ? (
               <p className={styles.empty}>
-                No hay proyectos recomendados en esta matriz.
+                No hay proyectos recomendados en esta selección.
               </p>
             ) : (
               topProjects.map((project, index) => (
                 <div key={project.id} className={styles.item}>
                   <span className={styles.rank}>{index + 1}</span>
-                  <span className={styles.emoji} aria-hidden="true">
-                    {project.emoji}
-                  </span>
+                  <ProjectIcon projectId={project.id} className={styles.projectIcon} />
                   <div className={styles.itemText}>
                     <p className={styles.itemName}>{project.name}</p>
                     <p className={styles.itemVerdict}>{project.verdict}</p>

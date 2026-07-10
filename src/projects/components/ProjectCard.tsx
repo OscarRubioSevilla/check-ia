@@ -4,6 +4,8 @@ import {
   WORKSHOP_CRITERION_SECTION_LABELS,
   WORKSHOP_DELIVERABLE_SECTION_ORDER,
 } from '../data/workshopCriteria.global'
+import { ChevronDown, Sparkles } from 'lucide-react'
+import { ProjectIcon } from './ProjectIcon'
 import styles from './ProjectCard.module.css'
 
 interface ProjectCardProps {
@@ -78,14 +80,15 @@ export function ProjectCard({
         aria-expanded={expanded}
         onClick={onToggle}
       >
-        <span className={styles.emoji} aria-hidden="true">
-          {project.emoji}
-        </span>
+        <ProjectIcon projectId={project.id} className={styles.projectIcon} />
         <span className={styles.headerText}>
           <h3 className={styles.title}>{project.name}</h3>
           <p className={styles.verdict}>{project.verdict}</p>
           {project.recommended ? (
-            <span className={styles.recommended}>Recomendado</span>
+            <span className={styles.recommended}>
+              <Sparkles className={styles.recommendedIcon} aria-hidden />
+              Recomendado
+            </span>
           ) : null}
         </span>
         <span className={styles.badges} aria-label="Semáforo de criterios">
@@ -102,12 +105,11 @@ export function ProjectCard({
             {ratingCounts.red}
           </span>
         </span>
-        <span
+        <ChevronDown
           className={`${styles.chevron} ${expanded ? styles.chevronExpanded : ''}`}
-          aria-hidden="true"
-        >
-          ▼
-        </span>
+          aria-hidden
+          strokeWidth={2}
+        />
       </button>
 
       <div className={styles.progressSection}>

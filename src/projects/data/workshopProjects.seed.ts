@@ -18,7 +18,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'inventario-qr',
     name: 'Inventario oficina QR',
-    emoji: '📦',
     verdict: 'Útil para aprender QR, pero API y LLM quedan débiles.',
     recommended: false,
     criteria: buildCriteria({
@@ -135,7 +134,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'cuentas-compartidas',
     name: 'Cuentas compartidas IA+QR',
-    emoji: '🔐',
     verdict: 'Recomendado: LLM fuerte para onboarding y políticas de uso.',
     recommended: true,
     criteria: buildCriteria({
@@ -252,7 +250,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'juego-naves',
     name: 'Juego naves',
-    emoji: '🚀',
     verdict: 'No recomendado: poco encaje con la rúbrica del taller.',
     recommended: false,
     criteria: buildCriteria({
@@ -369,7 +366,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'app-estudio',
     name: 'App estudio plan IA',
-    emoji: '📋',
     verdict: 'Recomendado: plan de estudio con IA como copiloto pedagógico.',
     recommended: true,
     criteria: buildCriteria({
@@ -486,7 +482,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'calorias',
     name: 'App calorías',
-    emoji: '🥗',
     verdict: 'Más fuerte de la matriz: problema claro, LLM útil y MVP realista.',
     recommended: true,
     criteria: buildCriteria({
@@ -603,7 +598,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'viajes',
     name: 'Planificación viajes',
-    emoji: '✈️',
     verdict: 'Competitivo: buen encaje, pero el alcance puede inflarse con integraciones.',
     recommended: false,
     criteria: buildCriteria({
@@ -720,7 +714,6 @@ export const WORKSHOP_PROJECTS: WorkshopProject[] = [
   {
     id: 'meta-concreta',
     name: 'Meta concreta',
-    emoji: '🎯',
     verdict: 'Idea potente, pero necesita acotar problema y MVP antes de arrancar.',
     recommended: false,
     criteria: buildCriteria({

@@ -4,9 +4,9 @@ import { cn } from '../../shared/lib/cn'
 import { useChecklistStore } from '../hooks/useChecklistStore'
 
 const RATING_DOT_CLASS: Record<Rating, string> = {
-  green: 'bg-green-500',
-  yellow: 'bg-yellow-500',
-  red: 'bg-red-500',
+  green: 'bg-success',
+  yellow: 'bg-warning',
+  red: 'bg-error',
 }
 
 export interface CriteriaRowProps {
@@ -39,7 +39,7 @@ export function CriteriaRow({
   const hasNote = note.trim().length > 0
 
   return (
-    <div className="border-b border-gray-200 py-3 last:border-b-0">
+    <div className="border-b border-border py-3 last:border-b-0">
       <div className="flex min-h-12 items-start gap-3">
         <span
           aria-hidden="true"
@@ -51,9 +51,9 @@ export function CriteriaRow({
         />
 
         <div className="min-w-0 flex-1">
-          <p className="text-sm leading-snug text-gray-900">{label}</p>
+          <p className="text-sm leading-snug text-primary">{label}</p>
           {hint ? (
-            <p className="mt-1 line-clamp-2 text-xs text-gray-500">{hint}</p>
+            <p className="mt-1 line-clamp-2 text-xs text-secondary">{hint}</p>
           ) : null}
         </div>
 
@@ -62,7 +62,7 @@ export function CriteriaRow({
           checked={isChecked}
           onChange={() => toggleCriterion(projectId, criterionId)}
           aria-label={`Marcar criterio: ${label}`}
-          className="mt-1 size-5 shrink-0 touch-manipulation accent-blue-500"
+          className="mt-1 size-5 shrink-0 touch-manipulation accent-accent-bg"
         />
       </div>
 
@@ -72,7 +72,7 @@ export function CriteriaRow({
           onClick={() => setNoteExpanded((expanded) => !expanded)}
           aria-expanded={noteExpanded}
           aria-controls={noteFieldId}
-          className="min-h-10 touch-manipulation text-xs text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
+          className="min-h-10 touch-manipulation text-xs text-secondary underline-offset-2 hover:text-primary hover:underline"
         >
           {noteExpanded
             ? 'Ocultar nota'
@@ -90,7 +90,7 @@ export function CriteriaRow({
             }
             rows={3}
             placeholder="Notas de evaluación…"
-            className="mt-2 w-full resize-y rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-2 w-full resize-y rounded-md border border-border bg-surface px-3 py-2 text-sm text-primary placeholder:text-disabled focus:border-border-strong focus:outline-none focus:ring-1 focus:ring-accent-bg"
           />
         ) : null}
       </div>

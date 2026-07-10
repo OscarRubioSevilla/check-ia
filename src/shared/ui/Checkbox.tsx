@@ -21,17 +21,17 @@ export function Checkbox({
       htmlFor={checkboxId}
       className={cn(
         "flex min-h-12 w-full cursor-pointer touch-manipulation items-center gap-3",
-        "rounded-lg border border-gray-200 bg-white px-4 py-2",
-        "text-sm text-gray-900",
-        "transition-colors duration-150 hover:border-gray-300",
-        "has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-blue-500",
+        "rounded-md border border-border bg-surface px-4 py-2",
+        "text-sm text-primary",
+        "transition-colors duration-150 hover:border-border-strong",
+        "has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent-bg",
         className,
       )}
     >
       <input
         type="checkbox"
         id={checkboxId}
-        className="size-5 shrink-0 accent-blue-500"
+        className="size-5 shrink-0 accent-accent-bg"
         {...props}
       />
       <span className="flex-1 text-left leading-snug">{label}</span>

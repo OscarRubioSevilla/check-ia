@@ -1,13 +1,24 @@
 @import "tailwindcss";
-@import "./matrix-theme/tokens/matrix.css";
-
-@theme inline {
-  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
-}
+@import "@astryxdesign/core/reset.css";
+@import "@astryxdesign/core/astryx.css";
+@import "./themes/neutral/theme.css";
+@import "@astryxdesign/core/tailwind-theme.css";
 
 @layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
-    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+    margin: 0;
+    background-color: var(--color-background-body);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body), system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

@@ -1,5 +1,10 @@
 import { ChecklistPage } from '@/checklist/components/ChecklistPage'
+import { ThemeProvider } from '@/app/ThemeProvider'
 
 export default function App() {
-  return <ChecklistPage />
+  return (
+    <ThemeProvider>
+      <ChecklistPage />
+    </ThemeProvider>
+  )
 }

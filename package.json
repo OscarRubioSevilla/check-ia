@@ -8,13 +8,18 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "astryx": "node node_modules/@astryxdesign/cli/bin/astryx.mjs"
   },
   "dependencies": {
+    "@astryxdesign/core": "^0.1.4",
+    "@astryxdesign/theme-neutral": "^0.1.4",
+    "lucide-react": "^1.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@astryxdesign/cli": "^0.1.4",
     "@tailwindcss/vite": "^4.3.2",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",

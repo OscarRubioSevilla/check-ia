@@ -18,14 +18,14 @@ export function Button({
       type={type}
       className={cn(
         "inline-flex min-h-12 w-full touch-manipulation items-center justify-center",
-        "rounded-lg border px-4 text-sm font-medium",
+        "rounded-md border px-4 text-sm font-medium",
         "transition-colors duration-150 active:scale-[0.98]",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-bg",
         "disabled:pointer-events-none disabled:opacity-40",
         variant === "primary" &&
-          "border-blue-500 bg-blue-500 text-white hover:bg-blue-600",
+          "border-accent-bg bg-accent-bg text-on-accent hover:opacity-90",
         variant === "ghost" &&
-          "border-gray-200 bg-transparent text-gray-600 hover:border-gray-300 hover:text-gray-900",
+          "border-border bg-transparent text-secondary hover:border-border-strong hover:text-primary",
         className,
       )}
       {...props}
