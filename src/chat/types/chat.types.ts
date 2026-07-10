@@ -15,12 +15,20 @@ export interface OpenRouterChatRequest {
   temperature?: number
 }
 
+export interface OpenRouterReasoningDetail {
+  text?: string
+}
+
+export interface OpenRouterMessage {
+  role?: string
+  content?: string | null
+  reasoning?: string
+  reasoning_details?: OpenRouterReasoningDetail[]
+}
+
 export interface OpenRouterChatResponse {
   choices?: Array<{
-    message?: {
-      role?: string
-      content?: string
-    }
+    message?: OpenRouterMessage
   }>
   error?: {
     message?: string

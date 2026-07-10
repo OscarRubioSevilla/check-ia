@@ -76,11 +76,24 @@ export async function sendOpenRouterChat(
     )
   }
 
-  const content = payload.choices?.[0]?.message?.content
+  return extractOpenRouterAssistantText(payload)
+}
 
-  if (!content || content.trim().length === 0) {
-    throw new Error('OpenRouter devolvió una respuesta vacía.')
+export function extractOpenRouterAssistantText(
+  payload: OpenRouterChatResponse,
+): string {
+  const message = payload.choices?.[0]?.message
+  const candidates = [
+    message?.content,
+    message?.reasoning,
+    message?.reasoning_details?.[0]?.text,
+  ]
+
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string' && candidate.trim().length > 0) {
+      return candidate.trim()
+    }
   }
 
-  return content.trim()
+  throw new Error('OpenRouter devolvió una respuesta vacía.')
 }
