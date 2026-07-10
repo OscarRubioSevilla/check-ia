@@ -133,11 +133,17 @@
 .criterion {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
   min-height: 44px;
   padding: 10px 16px;
   box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.scoreInput {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .criterionLabel {
@@ -222,6 +228,19 @@
   background: var(--color-error-muted);
   border-color: var(--color-border-red);
   color: var(--color-text-red);
+}
+
+.scoreOverride {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.scoreOverrideLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-disabled);
 }
 
 .recommended {

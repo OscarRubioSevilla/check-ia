@@ -22,6 +22,7 @@ export function ProgressHeader({ children, className }: ProgressHeaderProps) {
 export interface MobileShellProps extends PropsWithChildren {
   header?: ReactNode
   bottomPanel?: ReactNode
+  bottomPanelOffset?: string
   className?: string
 }
 
@@ -29,8 +30,13 @@ export function MobileShell({
   header,
   children,
   bottomPanel,
+  bottomPanelOffset = '0px',
   className,
 }: MobileShellProps) {
+  const mainPaddingBottom = bottomPanel
+    ? `calc(6rem + ${bottomPanelOffset} + env(safe-area-inset-bottom, 0px))`
+    : `calc(4.5rem + ${bottomPanelOffset} + env(safe-area-inset-bottom, 0px))`
+
   return (
     <div
       className={cn(
@@ -47,17 +53,16 @@ export function MobileShell({
 
       <main
         className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain"
-        style={{
-          paddingBottom: 'calc(6rem + env(safe-area-inset-bottom, 0px))',
-        }}
+        style={{ paddingBottom: mainPaddingBottom }}
       >
         {children}
       </main>
 
       {bottomPanel ? (
         <div
-          className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-surface"
+          className="fixed inset-x-0 z-30 border-t border-border bg-surface"
           style={{
+            bottom: bottomPanelOffset,
             paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             paddingLeft: 'env(safe-area-inset-left, 0px)',
             paddingRight: 'env(safe-area-inset-right, 0px)',

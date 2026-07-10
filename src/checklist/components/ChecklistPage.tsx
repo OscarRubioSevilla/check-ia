@@ -4,7 +4,7 @@ import { WORKSHOP_PROJECTS } from '../../projects/data/workshopProjects.seed'
 import { ProjectList } from '../../projects/components/ProjectList'
 import { RecommendationPanel } from '../../projects/components/RecommendationPanel'
 import type { ChecklistState as ProjectChecklistState } from '../../projects/types/project.types'
-import type { EvaluationRating } from '../types/checklist.types'
+import type { CriterionScore, EvaluationRating } from '../types/checklist.types'
 import { useChecklistStore } from '../hooks/useChecklistStore'
 import { ProgressHeader } from './ProgressHeader'
 
@@ -32,12 +32,12 @@ function toProjectChecklistState(
   return result
 }
 
-function toProjectRatingsState(
-  ratings: Record<string, EvaluationRating>,
-): Record<string, Record<string, EvaluationRating>> {
-  const result: Record<string, Record<string, EvaluationRating>> = {}
+function toNestedState<T extends string | number>(
+  flat: Record<string, T>,
+): Record<string, Record<string, T>> {
+  const result: Record<string, Record<string, T>> = {}
 
-  for (const [key, value] of Object.entries(ratings)) {
+  for (const [key, value] of Object.entries(flat)) {
     const separatorIndex = key.indexOf(':')
     if (separatorIndex === -1) {
       continue
@@ -62,8 +62,10 @@ export function ChecklistPage() {
 
   const checked = useChecklistStore((state) => state.checked)
   const ratings = useChecklistStore((state) => state.ratings)
+  const scores = useChecklistStore((state) => state.scores)
   const toggleCriterion = useChecklistStore((state) => state.toggleCriterion)
   const setRating = useChecklistStore((state) => state.setRating)
+  const setScore = useChecklistStore((state) => state.setScore)
 
   const projectChecklistState = useMemo(
     () => toProjectChecklistState(checked),
@@ -71,8 +73,13 @@ export function ChecklistPage() {
   )
 
   const projectRatingsState = useMemo(
-    () => toProjectRatingsState(ratings),
+    () => toNestedState(ratings),
     [ratings],
+  )
+
+  const projectScoresState = useMemo(
+    () => toNestedState(scores) as Record<string, Record<string, CriterionScore>>,
+    [scores],
   )
 
   const handleProjectToggle = (projectId: string) => {
@@ -111,6 +118,14 @@ export function ChecklistPage() {
     setRating(projectId, criterionId, rating)
   }
 
+  const handleScoreChange = (
+    projectId: string,
+    criterionId: string,
+    score: CriterionScore | undefined,
+  ) => {
+    setScore(projectId, criterionId, score)
+  }
+
   return (
     <MobileShell
       header={<ProgressHeader />}
@@ -121,16 +136,19 @@ export function ChecklistPage() {
           onToggle={() => setRecommendationsExpanded((current) => !current)}
         />
       }
+      bottomPanelOffset="var(--bottom-nav-height, 0px)"
     >
       <div className="px-4 pt-4 md:mx-auto md:max-w-2xl">
         <ProjectList
           projects={WORKSHOP_PROJECTS}
           checklistState={projectChecklistState}
           ratingsState={projectRatingsState}
+          scoresState={projectScoresState}
           expandedId={expandedId}
           onToggle={handleProjectToggle}
           onCriterionChange={handleCriterionChange}
           onRatingChange={handleRatingChange}
+          onScoreChange={handleScoreChange}
         />
       </div>
     </MobileShell>

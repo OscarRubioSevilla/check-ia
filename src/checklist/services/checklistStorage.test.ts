@@ -9,6 +9,7 @@ import {
   saveChecklistState,
   setNote,
   setRating,
+  setScore,
   toggleChecked,
 } from './checklistStorage'
 
@@ -59,6 +60,7 @@ describe('checklistStorage', () => {
 
     expect(state.checked).toEqual({})
     expect(state.ratings).toEqual({})
+    expect(state.scores).toEqual({})
     expect(state.notes).toEqual({})
     expect(state.lastUpdated).toMatch(/^\d{4}-\d{2}-\d{2}T/)
   })
@@ -78,6 +80,10 @@ describe('checklistStorage', () => {
           'calorias:capacidad-analisis': 'strong',
           'bad:key': 'invalid',
         },
+        scores: {
+          'calorias:crud-entidad': 4,
+          'bad:key': 9,
+        },
         notes: { 'calorias:crud-entidad': 'ok', 'bad:key': 1 },
         lastUpdated: '2026-07-10T10:00:00.000Z',
       }),
@@ -86,12 +92,13 @@ describe('checklistStorage', () => {
     expect(loadChecklistState()).toEqual({
       checked: { 'calorias:crud-entidad': true },
       ratings: { 'calorias:capacidad-analisis': 'strong' },
+      scores: { 'calorias:crud-entidad': 4 },
       notes: { 'calorias:crud-entidad': 'ok' },
       lastUpdated: '2026-07-10T10:00:00.000Z',
     })
   })
 
-  it('migra estados antiguos sin ratings', () => {
+  it('migra estados antiguos sin ratings ni scores', () => {
     localStorage.setItem(
       CHECKLIST_STORAGE_KEY,
       JSON.stringify({
@@ -104,6 +111,7 @@ describe('checklistStorage', () => {
     expect(loadChecklistState()).toEqual({
       checked: { 'viajes:responsive': true },
       ratings: {},
+      scores: {},
       notes: {},
       lastUpdated: '2026-07-10T09:00:00.000Z',
     })
@@ -114,6 +122,9 @@ describe('checklistStorage', () => {
       checked: { [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: true },
       ratings: {
         [makeCheckKey('cuentas-compartidas', 'capacidad-analisis')]: 'medium' as const,
+      },
+      scores: {
+        [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: 5 as const,
       },
       notes: { [makeCheckKey('cuentas-compartidas', 'llm-funcional')]: 'Muy fuerte' },
       lastUpdated: '2026-07-10T11:00:00.000Z',
@@ -146,6 +157,19 @@ describe('checklistStorage', () => {
 
     expect(next.ratings[key]).toBe('weak')
     expect(next.checked).toEqual(base.checked)
+    expect(next.scores).toEqual(base.scores)
+  })
+
+  it('setScore persiste puntuación numérica por criterio', () => {
+    const base = createDefaultChecklistState()
+    const key = makeCheckKey('calorias', 'frontend-funcional')
+
+    const next = setScore(base, 'calorias', 'frontend-funcional', 4)
+
+    expect(next.scores[key]).toBe(4)
+
+    const cleared = setScore(next, 'calorias', 'frontend-funcional', undefined)
+    expect(cleared.scores[key]).toBeUndefined()
   })
 
   it('setNote persiste texto por criterio', () => {
@@ -157,5 +181,6 @@ describe('checklistStorage', () => {
     expect(next.notes[key]).toBe('Falta integración real')
     expect(next.checked).toEqual(base.checked)
     expect(next.ratings).toEqual(base.ratings)
+    expect(next.scores).toEqual(base.scores)
   })
 })

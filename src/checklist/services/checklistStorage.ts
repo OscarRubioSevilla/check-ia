@@ -1,8 +1,10 @@
 import {
   CHECKLIST_STORAGE_KEY,
   createDefaultChecklistState,
+  isValidScore,
   makeCheckKey,
   type ChecklistState,
+  type CriterionScore,
   type EvaluationRating,
 } from '../types/checklist.types'
 
@@ -21,7 +23,8 @@ function isChecklistState(value: unknown): value is ChecklistState {
     isRecord(value.checked) &&
     isRecord(value.notes) &&
     typeof value.lastUpdated === 'string' &&
-    (value.ratings === undefined || isRecord(value.ratings))
+    (value.ratings === undefined || isRecord(value.ratings)) &&
+    (value.scores === undefined || isRecord(value.scores))
   )
 }
 
@@ -74,6 +77,24 @@ function sanitizeRatingRecord(
   return result
 }
 
+function sanitizeScoreRecord(
+  value: Record<string, unknown> | undefined,
+): Record<string, CriterionScore> {
+  const result: Record<string, CriterionScore> = {}
+
+  if (!value) {
+    return result
+  }
+
+  for (const [key, entry] of Object.entries(value)) {
+    if (typeof entry === 'number' && isValidScore(entry)) {
+      result[key] = entry
+    }
+  }
+
+  return result
+}
+
 function normalizeChecklistState(value: unknown): ChecklistState {
   if (!isChecklistState(value)) {
     return createDefaultChecklistState()
@@ -82,6 +103,7 @@ function normalizeChecklistState(value: unknown): ChecklistState {
   return {
     checked: sanitizeBooleanRecord(value.checked),
     ratings: sanitizeRatingRecord(value.ratings),
+    scores: sanitizeScoreRecord(value.scores),
     notes: sanitizeStringRecord(value.notes),
     lastUpdated: value.lastUpdated,
   }
@@ -119,6 +141,7 @@ export function saveChecklistState(state: ChecklistState): void {
     const payload: ChecklistState = {
       checked: state.checked,
       ratings: state.ratings,
+      scores: state.scores,
       notes: state.notes,
       lastUpdated: state.lastUpdated,
     }
@@ -142,6 +165,7 @@ export function toggleChecked(
       [key]: !state.checked[key],
     },
     ratings: { ...state.ratings },
+    scores: { ...state.scores },
     notes: { ...state.notes },
     lastUpdated: new Date().toISOString(),
   }
@@ -161,6 +185,31 @@ export function setRating(
       ...state.ratings,
       [key]: rating,
     },
+    scores: { ...state.scores },
+    notes: { ...state.notes },
+    lastUpdated: new Date().toISOString(),
+  }
+}
+
+export function setScore(
+  state: ChecklistState,
+  projectId: string,
+  criterionId: string,
+  score: CriterionScore | undefined,
+): ChecklistState {
+  const key = makeCheckKey(projectId, criterionId)
+  const nextScores = { ...state.scores }
+
+  if (score === undefined) {
+    delete nextScores[key]
+  } else {
+    nextScores[key] = score
+  }
+
+  return {
+    checked: { ...state.checked },
+    ratings: { ...state.ratings },
+    scores: nextScores,
     notes: { ...state.notes },
     lastUpdated: new Date().toISOString(),
   }
@@ -177,6 +226,7 @@ export function setNote(
   return {
     checked: { ...state.checked },
     ratings: { ...state.ratings },
+    scores: { ...state.scores },
     notes: {
       ...state.notes,
       [key]: note,

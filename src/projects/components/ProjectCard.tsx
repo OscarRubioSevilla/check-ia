@@ -1,9 +1,11 @@
 import type { EvaluationRating } from '../../checklist/types/checklist.types'
+import type { CriterionScore } from '../../checklist/types/checklist.types'
 import type { Rating, WorkshopProject } from '../types/project.types'
 import {
   WORKSHOP_CRITERION_SECTION_LABELS,
   WORKSHOP_DELIVERABLE_SECTION_ORDER,
 } from '../data/workshopCriteria.global'
+import { ScoreInput } from '../../shared/ui/ScoreInput'
 import { ChevronDown, Sparkles } from 'lucide-react'
 import { ProjectIcon } from './ProjectIcon'
 import styles from './ProjectCard.module.css'
@@ -13,11 +15,13 @@ interface ProjectCardProps {
   expanded: boolean
   checkedByCriterion: Record<string, boolean>
   ratingsByCriterion: Record<string, EvaluationRating>
+  scoresByCriterion: Record<string, CriterionScore>
   checkedCount: number
   totalCount: number
   onToggle: () => void
   onCriterionChange: (criterionId: string, checked: boolean) => void
   onRatingChange: (criterionId: string, rating: EvaluationRating) => void
+  onScoreChange: (criterionId: string, score: CriterionScore | undefined) => void
 }
 
 const EVALUATION_RATING_OPTIONS: {
@@ -54,11 +58,13 @@ export function ProjectCard({
   expanded,
   checkedByCriterion,
   ratingsByCriterion,
+  scoresByCriterion,
   checkedCount,
   totalCount,
   onToggle,
   onCriterionChange,
   onRatingChange,
+  onScoreChange,
 }: ProjectCardProps) {
   const ratingCounts = countRatings(project)
   const progressPercent =
@@ -177,6 +183,14 @@ export function ProjectCard({
                             {criterion.label}
                           </span>
                         </label>
+                        <ScoreInput
+                          value={scoresByCriterion[criterion.id]}
+                          onChange={(score) =>
+                            onScoreChange(criterion.id, score)
+                          }
+                          label={`Puntuación: ${criterion.label}`}
+                          className={styles.scoreInput}
+                        />
                       </div>
                     )
                   })}
@@ -189,6 +203,7 @@ export function ProjectCard({
             <h4 className={styles.blockTitle}>Evaluación externa</h4>
             {evaluationCriteria.map((criterion) => {
               const selectedRating = ratingsByCriterion[criterion.id]
+              const manualScore = scoresByCriterion[criterion.id]
               const groupName = `${project.id}-${criterion.id}-rating`
 
               return (
@@ -220,6 +235,16 @@ export function ProjectCard({
                         </button>
                       )
                     })}
+                  </div>
+                  <div className={styles.scoreOverride}>
+                    <span className={styles.scoreOverrideLabel}>
+                      Puntuación manual
+                    </span>
+                    <ScoreInput
+                      value={manualScore}
+                      onChange={(score) => onScoreChange(criterion.id, score)}
+                      label={`Override: ${criterion.label}`}
+                    />
                   </div>
                 </div>
               )
