@@ -5,25 +5,16 @@ export interface ProgressHeaderProps extends PropsWithChildren {
   className?: string
 }
 
-/** Sticky header slot for global progress (e.g. completion %). */
+/** Fixed header slot for global progress (e.g. completion %). */
 export function ProgressHeader({ children, className }: ProgressHeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 border-b border-gray-200 bg-white',
+        'shrink-0 border-b border-gray-200 bg-white',
         className,
       )}
-      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
-      <div
-        className="px-4 py-3"
-        style={{
-          paddingLeft: 'max(1rem, env(safe-area-inset-left, 0px))',
-          paddingRight: 'max(1rem, env(safe-area-inset-right, 0px))',
-        }}
-      >
-        {children}
-      </div>
+      <div className="px-4 py-3">{children}</div>
     </header>
   )
 }
@@ -43,17 +34,20 @@ export function MobileShell({
   return (
     <div
       className={cn(
-        'flex min-h-svh flex-col bg-gray-50 text-gray-700',
+        'flex h-svh flex-col overflow-hidden bg-gray-50 text-gray-700',
         className,
       )}
+      style={{
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingLeft: 'env(safe-area-inset-left, 0px)',
+        paddingRight: 'env(safe-area-inset-right, 0px)',
+      }}
     >
       {header ? <ProgressHeader>{header}</ProgressHeader> : null}
 
       <main
-        className="flex-1 overflow-y-auto overscroll-y-contain pb-24"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain"
         style={{
-          paddingLeft: 'env(safe-area-inset-left, 0px)',
-          paddingRight: 'env(safe-area-inset-right, 0px)',
           paddingBottom: 'calc(6rem + env(safe-area-inset-bottom, 0px))',
         }}
       >
