@@ -42,7 +42,7 @@ En un taller con **siete ideas de producto** (inventario QR, cuentas compartidas
 | Estado | Zustand (checklist + ratings + scores + persistencia) |
 | Iconos | Lucide React |
 | PWA | `vite-plugin-pwa` (manifest, iconos, modo standalone) |
-| IA | OpenRouter API (`google/gemini-2.0-flash-001`) |
+| IA | OpenRouter API (`deepseek/deepseek-v4-flash`) |
 | Tests | Vitest + happy-dom |
 | Lint | Oxlint |
 
@@ -125,7 +125,7 @@ El asistente recibe en el system prompt los 7 proyectos, 27 criterios y puntuaci
 - «¿Qué criterios faltan en cuentas-compartidas?»
 - «Sugiere mejoras según las puntuaciones»
 
-Modelo por defecto: `google/gemini-2.0-flash-001` (económico y rápido).
+Modelo por defecto: `deepseek/deepseek-v4-flash` (económico y rápido).
 
 ## Instalar como PWA en móvil
 

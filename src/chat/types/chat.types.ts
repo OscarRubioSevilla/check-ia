@@ -1,6 +1,6 @@
 export const OPENROUTER_API_KEY_STORAGE = 'openrouter-api-key'
 
-export const DEFAULT_OPENROUTER_MODEL = 'google/gemini-2.0-flash-001'
+export const DEFAULT_OPENROUTER_MODEL = 'deepseek/deepseek-v4-flash'
 
 export interface ChatMessage {
   id: string
