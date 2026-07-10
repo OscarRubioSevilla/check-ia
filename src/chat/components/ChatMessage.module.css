@@ -1,0 +1,50 @@
+.userText {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.assistantMessage {
+  max-width: 36rem;
+}
+
+.markdown {
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.markdown :global(p) {
+  margin: 0 0 0.75em;
+}
+
+.markdown :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.markdown :global(strong) {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.markdown :global(ul),
+.markdown :global(ol) {
+  margin: 0.5em 0 0.75em;
+  padding-left: 1.25rem;
+}
+
+.markdown :global(li) {
+  margin: 0.35em 0;
+}
+
+.markdown :global(li::marker) {
+  color: var(--color-text-secondary);
+}
+
+.markdown :global(ul ul),
+.markdown :global(ol ol),
+.markdown :global(ul ol),
+.markdown :global(ol ul) {
+  margin-top: 0.35em;
+  margin-bottom: 0;
+}

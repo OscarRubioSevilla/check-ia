@@ -5,7 +5,7 @@ import { useWorkshopContext } from '../hooks/useWorkshopContext'
 import { ChatSettingsPanel } from './ChatSettings'
 import { Button } from '../../shared/ui/Button'
 import { Loader2, Send, Trash2 } from 'lucide-react'
-import { cn } from '../../shared/lib/cn'
+import { ChatMessage } from './ChatMessage'
 
 const SUGGESTIONS = [
   '¿Cuál proyecto va mejor?',
@@ -70,17 +70,11 @@ export function ChatPage() {
 
         <div className="flex-1 space-y-3 pb-4">
           {messages.map((message) => (
-            <div
+            <ChatMessage
               key={message.id}
-              className={cn(
-                'max-w-[90%] rounded-lg px-3 py-2 text-sm leading-relaxed',
-                message.role === 'user'
-                  ? 'ml-auto bg-accent-bg text-on-accent'
-                  : 'mr-auto border border-border bg-surface text-primary',
-              )}
-            >
-              {message.content}
-            </div>
+              role={message.role}
+              content={message.content}
+            />
           ))}
 
           {loading ? (
